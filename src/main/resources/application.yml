@@ -1,0 +1,12 @@
+server:
+  port: 16666
+
+netty:
+  websocket:
+    port: 8082
+    path: /ws/xiaozhi/v1/
+    bossThreads: 1
+    workerThreads: 4
+    maxFrameSize: 65536
+    idleTimeout: 300
+    writeIdleTimeout: 120
