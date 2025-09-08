@@ -10,3 +10,34 @@ netty:
     maxFrameSize: 65536
     idleTimeout: 300
     writeIdleTimeout: 120
+
+# AI配置
+ai:
+  provider: openai  # 可选：openai, xunfei, baidu
+  apiKey: your_api_key_here
+  model: gpt-3.5-turbo
+
+security:
+  jwt:
+    secret: change_this_secret_in_prod_please_32bytes_min
+    expirationSeconds: 86400
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/interview_ai?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.interview.chat
+  configuration:
+    map-underscore-to-camel-case: true
+
+# 语音配置
+speech:
+  provider: xunfei  # 可选：xunfei, baidu
+  appId: your_app_id_here
+  apiKey: your_api_key_here
+  apiSecret: your_api_secret_here
+  voskModelPath: C:/models/vosk-model-small-cn-0.22

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 对话控制台</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+<div id="app" class="container">
+  <header class="header">
+    <h1>AI 对话控制台</h1>
+    <div class="user" v-if="state.token">
+      <span>{{ state.username }}</span>
+      <button class="btn btn-ghost" @click="logout">退出</button>
+    </div>
+  </header>
+
+  <section v-if="!state.token" class="card">
+    <h2>登录</h2>
+    <div class="form">
+      <label>用户名</label>
+      <input v-model="login.username" placeholder="用户名"/>
+      <label>密码</label>
+      <input type="password" v-model="login.password" placeholder="密码"/>
+      <div class="row">
+        <button class="btn" @click="doLogin">登录</button>
+        <button class="btn btn-ghost" @click="doRegister">注册</button>
+      </div>
+      <p class="muted">默认内置用户 admin / admin123</p>
+    </div>
+  </section>
+
+  <section v-else class="grid">
+    <div class="card">
+      <h2>文本聊天（REST）</h2>
+      <div class="form">
+        <textarea v-model="text.input" rows="4" placeholder="输入你的问题..."></textarea>
+        <button class="btn" :disabled="text.loading" @click="sendTextChat">
+          {{ text.loading ? '发送中...' : '发送' }}
+        </button>
+      </div>
+      <div class="log" v-html="text.answerHtml"></div>
+    </div>
+
+    <div class="card">
+      <h2>文本聊天（WebSocket）</h2>
+      <div class="form">
+        <div class="row">
+          <input v-model="ws.server" placeholder="ws://localhost:8082/ws/xiaozhi/v1/"/>
+          <button class="btn" @click="toggleWs">{{ ws.connected ? '断开' : '连接' }}</button>
+        </div>
+        <input v-model="ws.message" placeholder="输入要发送的消息"/>
+        <button class="btn" :disabled="!ws.connected" @click="sendWsText">发送</button>
+      </div>
+      <div class="log" v-html="ws.logHtml"></div>
+    </div>
+
+    <div class="card">
+      <h2>语音对话（REST）</h2>
+      <div class="form">
+        <div class="row">
+          <button class="btn" :disabled="rec.recording" @click="startRecord">开始录音</button>
+          <button class="btn btn-warn" :disabled="!rec.recording" @click="stopRecord">停止</button>
+          <button class="btn" :disabled="!rec.wavBlob || rec.loading" @click="sendVoiceDialog">{{ rec.loading ? '提交中...' : '提交语音' }}</button>
+        </div>
+        <p v-if="rec.status" class="muted">{{ rec.status }}</p>
+        <audio v-if="rec.ttsUrl" :src="rec.ttsUrl" controls></audio>
+      </div>
+      <div class="log" v-html="rec.logHtml"></div>
+    </div>
+
+    <div class="card">
+      <h2>程序员面试智能体</h2>
+      <div class="form">
+        <div class="row">
+          <select v-model="agent.role">
+            <option value="backend">后端</option>
+            <option value="frontend">前端</option>
+            <option value="fullstack">全栈</option>
+            <option value="android">Android</option>
+            <option value="ios">iOS</option>
+          </select>
+          <select v-model="agent.level">
+            <option value="junior">初级</option>
+            <option value="mid">中级</option>
+            <option value="senior">高级</option>
+          </select>
+          <button class="btn" :disabled="agent.sessionId" @click="startAgent">开始面试</button>
+        </div>
+        <textarea v-model="agent.input" rows="3" placeholder="回答或提问..."></textarea>
+        <button class="btn" :disabled="!agent.sessionId" @click="sendAgent">发送</button>
+      </div>
+      <div class="log" v-html="agent.logHtml"></div>
+    </div>
+  </section>
+</div>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.interview.chat.ChatLogMapper">
+    <resultMap id="BaseResultMap" type="com.interview.chat.ChatLog">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="channel" property="channel"/>
+        <result column="session_id" property="sessionId"/>
+        <result column="user_message" property="userMessage"/>
+        <result column="ai_message" property="aiMessage"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <sql id="Base_Columns">id, username, channel, session_id, user_message, ai_message, created_at</sql>
+
+    <insert id="insert" parameterType="com.interview.chat.ChatLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO chat_log (username, channel, session_id, user_message, ai_message, created_at)
+        VALUES (#{username}, #{channel}, #{sessionId}, #{userMessage}, #{aiMessage}, #{createdAt})
+    </insert>
+</mapper>
+
+

@@ -1,7 +1,9 @@
 package com.interview.webstocket.netty;
 
 import com.interview.webstocket.handeler.TextWebSocketFrameHandler;
+import com.interview.webstocket.handeler.WebSocketHandshakeHandler;
 import com.interview.webstocket.handeler.WebSocketHeartbeatHandler;
+import com.interview.webstocket.handeler.BinaryWebSocketFrameHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -57,6 +59,21 @@ public class NettyWebSocketConfig {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
 
+    private final WebSocketHandshakeHandler handshakeHandler;
+    private final WebSocketHeartbeatHandler heartbeatHandler;
+    private final TextWebSocketFrameHandler textHandler;
+    private final BinaryWebSocketFrameHandler binaryHandler;
+
+    public NettyWebSocketConfig(WebSocketHandshakeHandler handshakeHandler,
+                                WebSocketHeartbeatHandler heartbeatHandler,
+                                TextWebSocketFrameHandler textHandler,
+                                BinaryWebSocketFrameHandler binaryHandler) {
+        this.handshakeHandler = handshakeHandler;
+        this.heartbeatHandler = heartbeatHandler;
+        this.textHandler = textHandler;
+        this.binaryHandler = binaryHandler;
+    }
+
     @PostConstruct
     public void start() throws Exception {
         logger.info("启动Netty WebSocket服务器，端口：{}，路径：{}", port, websocketPath);
@@ -83,7 +100,7 @@ public class NettyWebSocketConfig {
                                     // HTTP消息聚合器
                                     .addLast(new HttpObjectAggregator(maxFrameSize))
                                     // WebSocket握手处理
-//                                    .addLast(new WebSocketHandshakeHandler())
+                                    .addLast(handshakeHandler)
                                     //处理 WebSocket 协议的升级和消息解析
                                     .addLast(new WebSocketServerProtocolHandler(
                                             websocketPath,
@@ -99,13 +116,11 @@ public class NettyWebSocketConfig {
                                     .addLast(new IdleStateHandler(idleTimeout, idleTimeout,
                                             idleTimeout, TimeUnit.SECONDS))
                                     // 心跳处理
-                                    .addLast(new WebSocketHeartbeatHandler())
-//                                    // WebSocket文本帧处理
-                                    .addLast(new TextWebSocketFrameHandler());
-//                                    // WebSocket控制帧处理
-//                                    .addLast(new WebSocketControlFrameHandler())
-//                                    // WebSocket二进制帧处理
-//                                    .addLast(new BinaryWebSocketFrameHandler())
+                                    .addLast(heartbeatHandler)
+                                    // 文本帧处理
+                                    .addLast(textHandler)
+                                    // 二进制帧处理（音频）
+                                    .addLast(binaryHandler)
 //                                    // 异常处理（放在最后捕获所有未处理的异常）
 //                                    .addLast(new WebSocketExceptionHandler());
                         }

@@ -1,6 +1,7 @@
 package com.interview.webstocket.service;
 
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 /**
  * <br/>
@@ -21,4 +22,17 @@ public interface  WebSocketService {
      * @param channel
      */
     void removed(Channel channel);
+
+    void handleMessage(Channel channel, TextWebSocketFrame frame);
+    void handleConnection(Channel channel);
+    void handleDisconnection(Channel channel);
+    
+    // 新增AI对话接口
+    String getAIResponse(String userInput);
+    
+    // 新增语音识别接口
+    String speechToText(byte[] audioData);
+    
+    // 新增语音合成接口
+    byte[] textToSpeech(String text);
 }
