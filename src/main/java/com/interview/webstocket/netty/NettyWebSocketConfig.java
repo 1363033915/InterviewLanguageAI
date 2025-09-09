@@ -120,7 +120,7 @@ public class NettyWebSocketConfig {
                                     // 文本帧处理
                                     .addLast(textHandler)
                                     // 二进制帧处理（音频）
-                                    .addLast(binaryHandler)
+                                    .addLast(binaryHandler);
 //                                    // 异常处理（放在最后捕获所有未处理的异常）
 //                                    .addLast(new WebSocketExceptionHandler());
                         }

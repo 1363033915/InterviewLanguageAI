@@ -2,6 +2,7 @@ package com.interview.webstocket.service.impl;
 
 import com.interview.webstocket.service.WebSocketService;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +33,36 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Override
     public void removed(Channel channel) {
         ONLINE_WS_MAP.remove(channel);
+    }
+
+    @Override
+    public void handleMessage(Channel channel, TextWebSocketFrame frame) {
+
+    }
+
+    @Override
+    public void handleConnection(Channel channel) {
+
+    }
+
+    @Override
+    public void handleDisconnection(Channel channel) {
+
+    }
+
+    @Override
+    public String getAIResponse(String userInput) {
+        return null;
+    }
+
+    @Override
+    public String speechToText(byte[] audioData) {
+        return null;
+    }
+
+    @Override
+    public byte[] textToSpeech(String text) {
+        return new byte[0];
     }
 
 

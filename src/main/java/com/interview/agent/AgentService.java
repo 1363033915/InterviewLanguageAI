@@ -16,16 +16,16 @@ public class AgentService {
         this.aiService = aiService;
     }
 
-    public AgentSession startSession(String username, String role, String level){
+    public AgentModels.AgentSession startSession(String username, String role, String level){
         return sessionManager.create(username, role, level);
     }
 
     public String message(String sessionId, String userMessage){
-        AgentSession s = sessionManager.get(sessionId);
+        AgentModels.AgentSession s = sessionManager.get(sessionId);
         if(s == null) return "会话不存在";
         String system = promptBuilder.buildSystemPrompt(s.getRole(), s.getLevel());
         String reply = aiService.chatWithSystem(system, userMessage);
-        Turn turn = new Turn(); turn.setUser(userMessage); turn.setAssistant(reply); s.getHistory().add(turn);
+        AgentModels.Turn turn = new AgentModels.Turn(); turn.setUser(userMessage); turn.setAssistant(reply); s.getHistory().add(turn);
         return reply;
     }
 }

@@ -22,7 +22,7 @@ public class AgentController {
     @PostMapping("/start")
     public ResponseEntity<Map<String, String>> start(@AuthenticationPrincipal User user,
                                                      @RequestBody StartReq req){
-        AgentSession s = agentService.startSession(user.getUsername(), req.getRole(), req.getLevel());
+        AgentModels.AgentSession s = agentService.startSession(user.getUsername(), req.getRole(), req.getLevel());
         return ResponseEntity.ok(Collections.singletonMap("sessionId", s.getSessionId()));
     }
 

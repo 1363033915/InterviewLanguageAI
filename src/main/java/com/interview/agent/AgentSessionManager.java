@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class AgentSessionManager {
-    private final Map<String, AgentSession> sessions = new ConcurrentHashMap<>();
+    private final Map<String, AgentModels.AgentSession> sessions = new ConcurrentHashMap<>();
 
-    public AgentSession create(String username, String role, String level){
-        AgentSession s = new AgentSession();
+    public AgentModels.AgentSession create(String username, String role, String level){
+        AgentModels.AgentSession s = new AgentModels.AgentSession();
         s.setUsername(username);
         if(role!=null) s.setRole(role);
         if(level!=null) s.setLevel(level);
@@ -18,7 +18,7 @@ public class AgentSessionManager {
         return s;
     }
 
-    public AgentSession get(String id){ return sessions.get(id); }
+    public AgentModels.AgentSession get(String id){ return sessions.get(id); }
 }
 
 
